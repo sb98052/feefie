@@ -34,25 +34,23 @@ def add_event(user, n):
 
     event.put()
 
-def add_events(user, eventstr):
-    uid = user.uid
-    events = json.loads(eventstr)
-    logging.info(str( events))
-    for n in events:
-        n['hash'] = safe_md5(uid+n['title'])
-        deferred.defer(add_event, user, n)
-    return events
-
-class add(Method):
+class make_event(Method):
     role = None
 
     def call(self, user, req, response):
         uid = req.get('u')
         try:
             user = User.get_user(uid)
-            espec = req.get('events')
-            respec = add_events(user, espec)
-            res = {'status':0,'events':respec}
+            espec = req.get('event')
+            event = json.loads(espec)
+
+            existing = Event.gql('WHERE title=:1 and user=:2',event['title'],uid).get()
+            if (existing_entry):
+                res = {'status':0,'hash':existing.hash,'new':False}
+            else:
+                event['hash'] = safe_md5(uid+event['title'])
+                add_event(user, event)
+                res = {'status':0,'hash':event['hash'],'new':False}
         except AuthError,e:
             logging.info(str(e))
             res = {'status':-2,'error':str(e)}

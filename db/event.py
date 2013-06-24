@@ -17,6 +17,7 @@ class Event(db.Expando):
   enotify = db.StringProperty()
   efire = db.StringProperty()
   hash = db.StringProperty()
+  user = db.StringProperty()
   parent_hash = db.StringProperty()
   depth = db.IntegerProperty(default=2)
   is_parent = db.BooleanProperty()

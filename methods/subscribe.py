@@ -28,8 +28,9 @@ class subscribe(Method):
                 </head>
                 <body>
                 <script>
+                    var eCount=0;
                     function onMessage(m) { 
-                        alert(m.data);
+                        eCount=eCount+1;
                     }
 
                     function onError(error) {
