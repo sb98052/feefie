@@ -41,14 +41,16 @@ def remove_channel_from_event(channel,event):
 
 # Greedy refers to the fact that we're creating a new channel
 # per connection, whereas it is possible to reuse channels.
-def greedy_create_channel(event):
-    clid = base64.urlsafe_b64encode(os.urandom(12))
+def greedy_create_channel(event,clid=clid):
+    if (not clid):
+        clid = base64.urlsafe_b64encode(os.urandom(12))
+
     try:
         token = create_channel(clid)
     except InvalidChannelClientIdError:
         logging.info('Invalid channel: %s'%clid)
-        return
+        return None,None
 
     event.channel_ids.append(clid)
     event.put()
-    return token
+    return clid,token

@@ -34,7 +34,7 @@ def add_event(user, n):
 
     event.put()
 
-class make_event(Method):
+class add(Method):
     role = None
 
     def call(self, user, req, response):
@@ -45,7 +45,7 @@ class make_event(Method):
             event = json.loads(espec)
 
             existing = Event.gql('WHERE title=:1 and user=:2',event['title'],uid).get()
-            if (existing_entry):
+            if (existing):
                 res = {'status':0,'hash':existing.hash,'new':False}
             else:
                 event['hash'] = safe_md5(uid+event['title'])

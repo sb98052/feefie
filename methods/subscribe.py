@@ -16,10 +16,13 @@ class subscribe(Method):
         h = req.get('hash')
         e = Event.gql('WHERE hash=:1',h).get()
         html = req.get('html')
+        clid = req.get('client_id')
+
         if (not e):
             response.out.write('Not found')
         else:
-            c = greedy_create_channel(e)
+            c,t = greedy_create_channel(e,clid=clid)
+
             if (html=='1'):
                 str="""
                 <html>
@@ -28,17 +31,19 @@ class subscribe(Method):
                 </head>
                 <body>
                 <script>
-                    var eCount=0;
+                    var eCount=0,payload;
                     function onMessage(m) { 
                         eCount=eCount+1;
+                        payload=m;
                     }
 
                     function onError(error) {
-                        alert('Reconnect to you need.');
+                        eCount--;
                     }
 
                     function onClose() 
                     {
+                        eCount--;
                     }
 
                     function onOpen() 
@@ -52,11 +57,11 @@ class subscribe(Method):
                     socket.onclose = onClose;
                     socket.onopen = onOpen;
                 </script>
-                <p>Please wait</p>
+                <p>If you don't know what this message means, then you probably should not be seeing it.</p>
                 </body>
                 </html>
-                """%c
+                """%t
                 response.out.write(str)
             else:
-                response.out.write(json.dumps({'status':0,'token':c}))
+                response.out.write(json.dumps({'status':0,'token':t,'client_id':c}))
 
