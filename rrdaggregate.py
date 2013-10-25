@@ -13,7 +13,7 @@ def main():
 	parser = argparse.ArgumentParser()
 	parser.add_argument('-datadir',help='Directory location of your rrd files',default='/usr/var/lib/collectd/rrd')
 	parser.add_argument('-rrdopts',help='Option string passed verbatim to rrdtool',default='--start now-1h --end now --json')
-	parser.add_argument('-print',help='Debug only',default='No',action='store_true')
+	parser.add_argument('-pretend',help='Debug only',default=False,action='store_true')
 	parser.add_argument('program',help='Program in YAML that specifies the required aggregation.')
 	values = parser.parse_args()
 
@@ -27,8 +27,11 @@ def main():
 	cmdline = """
 	rrdtool xport %(verbatim)s %(defs)s %(cdefs)s %(xports)s
 	"""%options
-	os.system(cmdline)
-	#print cmdline
+
+	if (not values.pretend):
+		os.system(cmdline)
+	else:
+		print cmdline
 	
 
 

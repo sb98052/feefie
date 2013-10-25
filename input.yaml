@@ -3,7 +3,7 @@ output: json
 
 entries:
 - name: princeton_per_node_cpu
-  regex: (node\d+\.princeton\.vicci\.org)/cpu-\d+/cpu-idle.rrd
+  regex: (node28\.princeton\.vicci\.org)/cpu-\d+/cpu-idle.rrd
   ds: value
   fn: sum
 

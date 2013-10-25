@@ -2,7 +2,7 @@ import yaml
 import os
 import re
 
-FIND_PATH='/usr/bin/find'
+FIND_PATH='find'
 
 class AggManager:
 	def __init__(self, program):
@@ -53,7 +53,7 @@ class AggManager:
 
 				self.cdefs.append('CDEF:%s=%s'%(xvar,','.join(psexp)))
 				i1+=1
-				self.xports.append('XPORT:%s:"%s"'%(xvar,xvar))
+				self.xports.append('XPORT:%s:"%s"'%(xvar,k))
 				
 			
 
